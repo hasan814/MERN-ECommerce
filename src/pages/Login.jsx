@@ -1,12 +1,16 @@
+import { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { SummaryApi } from "../utils/Api";
-import { useState } from "react";
 import { toast } from "react-toastify";
 
 import loginIcons from "../assets/signin.gif";
+import Context from "../context";
 
 const Login = () => {
+  // ========== Context ============
+  const { fetchUserDetails } = useContext(Context);
+
   // ========== Navigate ============
   const navigate = useNavigate();
 
@@ -30,7 +34,7 @@ const Login = () => {
     const responseData = await response.json();
     console.log(responseData);
     if (responseData.success)
-      toast.success(responseData.message), navigate("/");
+      toast.success(responseData.message), fetchUserDetails(), navigate("/");
     if (responseData.error) toast.error(responseData.message);
   };
   // ========== Rendering ============
