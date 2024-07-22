@@ -1,13 +1,16 @@
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import { toast, Toaster } from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 import { imageTobase64 } from "../utils/helper";
+import { SummaryApi } from "../utils/Api";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
-import SummaryApi from "../utils/API";
 import axios from "axios";
 
 const SignUp = () => {
+  // ========== Navigate ============
+  const navigate = useNavigate();
+
   // ========== State ============
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -28,7 +31,7 @@ const SignUp = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
     if (data.password !== data.confirmPassword) {
-      toast.error("Passwords are not Matched!");
+      toast.error("Password are not matched!");
       return;
     }
 
@@ -40,13 +43,22 @@ const SignUp = () => {
         data,
       });
       const responseData = response.data;
-      console.log(responseData);
-      toast.success("Registration Successfull!");
+      if (responseData) {
+        toast.success("Registration Successfully!");
+        setData({
+          name: "",
+          email: "",
+          password: "",
+          profilePic: "",
+          confirmPassword: "",
+        });
+        navigate("/login");
+      }
     } catch (error) {
       console.error("Error during registeration:", error);
       if (error.response)
-        toast.error(`Registration faild:${error.response.data.message}`);
-      else toast.error("Registration failed:Network error");
+        toast.error(`Registration faild : ${error.response.data.msg}`);
+      else toast.error("Registration faild: Network error");
     }
   };
 
@@ -60,7 +72,6 @@ const SignUp = () => {
   // ========== Rendering ============
   return (
     <section id="login">
-      <Toaster />
       <div className="mx-auto container p-4">
         <div className="bg-white p-5 w-full max-w-sm mx-auto">
           <div className="w-20 h-20 mx-auto relative overflow-hidden rounded-full">
