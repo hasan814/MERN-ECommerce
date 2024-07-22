@@ -5,4 +5,5 @@ export const SummaryApi = {
   signIn: { url: `${backendDomin}/api/signin`, method: "post" },
   current_user: { url: `${backendDomin}/api/user-details`, method: "get" },
   logout_user: { url: `${backendDomin}/api/userLogout`, method: "get" },
+  allUsers: { url: `${backendDomin}/api/all-users`, method: "get" },
 };

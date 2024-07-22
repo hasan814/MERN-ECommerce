@@ -1,19 +1,23 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setUserDetails } from "../../store/userSlice";
 import { FaRegCircleUser } from "react-icons/fa6";
+import { setUserDetails } from "../../store/userSlice";
 import { FaShoppingCart } from "react-icons/fa";
 import { SummaryApi } from "../../utils/Api";
 import { GrSearch } from "react-icons/gr";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 import Logo from "../elements/Logo";
 
 const Header = () => {
+  // ============ State ===========
+  const [menuDisplay, setMenuDisplay] = useState(false);
+
   // ============ Dispatch ===========
   const dispatch = useDispatch();
 
-  // ============ State ===========
+  // ============ Selector ===========
   const user = useSelector((state) => state?.user?.user);
   const ProfilePic = user?.profilePic;
   const name = user?.name;
@@ -27,7 +31,6 @@ const Header = () => {
       credentials: "include",
     });
     const data = await response.json();
-    console.log(data);
     if (data.success)
       toast.success(data.message), dispatch(setUserDetails(null));
     else if (data.error) toast.error(data.message);
@@ -52,16 +55,34 @@ const Header = () => {
             <GrSearch />
           </div>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="text-3xl cursor-pointer">
-            {user?.profilePic ? (
-              <img
-                src={ProfilePic}
-                alt={name}
-                className="w-10 h-10 rounded-full"
-              />
-            ) : (
-              <FaRegCircleUser />
+        <div className="flex items-center gap-7">
+          <div className="relative flex justify-center">
+            <div
+              className="text-3xl cursor-pointer relative flex justify-center"
+              onClick={() => setMenuDisplay((preve) => !preve)}
+            >
+              {user?.profilePic ? (
+                <img
+                  src={ProfilePic}
+                  alt={name}
+                  className="w-10 h-10 rounded-full"
+                />
+              ) : (
+                <FaRegCircleUser />
+              )}
+            </div>
+            {menuDisplay && (
+              <div className="absolute bg-white bottom-0 top-11 h-fit p-2 shadow-lg rounded">
+                <nav>
+                  <Link
+                    to={"admin-panel"}
+                    className="whitespace-nowrap hover:bg-slate-100 hidden md:block p-2"
+                    onClick={() => setMenuDisplay((preve) => !preve)}
+                  >
+                    Admin Panel
+                  </Link>
+                </nav>
+              </div>
             )}
           </div>
           <div className="text-2xl relative">

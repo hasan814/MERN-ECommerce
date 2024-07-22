@@ -32,7 +32,6 @@ const Login = () => {
       body: JSON.stringify(data),
     });
     const responseData = await response.json();
-    console.log(responseData);
     if (responseData.success)
       toast.success(responseData.message), fetchUserDetails(), navigate("/");
     if (responseData.error) toast.error(responseData.message);
