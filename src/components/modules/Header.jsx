@@ -2,10 +2,17 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
 import { GrSearch } from "react-icons/gr";
 import { Link } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 import Logo from "../elements/Logo";
 
 const Header = () => {
+  // ============ State ===========
+  const user = useSelector((state) => state?.user?.user);
+  const ProfilePic = user?.profilePic;
+  const name = user?.name;
+  console.log("header", user);
+
+  // ============ Rendering ===========
   return (
     <header className="h-16 shadow-md bg-white">
       <div className="container mx-auto h-full flex items-center justify-between px-4">
@@ -26,7 +33,15 @@ const Header = () => {
         </div>
         <div className="flex items-center gap-4">
           <div className="text-3xl cursor-pointer">
-            <FaRegCircleUser />
+            {user?.profilePic ? (
+              <img
+                src={ProfilePic}
+                alt={name}
+                className="w-10 h-10 rounded-full"
+              />
+            ) : (
+              <FaRegCircleUser />
+            )}
           </div>
           <div className="text-2xl relative">
             <span>
