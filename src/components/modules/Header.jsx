@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { FaRegCircleUser } from "react-icons/fa6";
 import { setUserDetails } from "../../store/userSlice";
+import { FaRegCircleUser } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
 import { SummaryApi } from "../../utils/Api";
 import { GrSearch } from "react-icons/gr";
