@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 import Logo from "../elements/Logo";
+import { ROLE } from "../../utils/role";
 
 const Header = () => {
   // ============ State ===========
@@ -57,30 +58,34 @@ const Header = () => {
         </div>
         <div className="flex items-center gap-7">
           <div className="relative flex justify-center">
-            <div
-              className="text-3xl cursor-pointer relative flex justify-center"
-              onClick={() => setMenuDisplay((preve) => !preve)}
-            >
-              {user?.profilePic ? (
-                <img
-                  src={ProfilePic}
-                  alt={name}
-                  className="w-10 h-10 rounded-full"
-                />
-              ) : (
-                <FaRegCircleUser />
-              )}
-            </div>
+            {user?._id && (
+              <div
+                className="text-3xl cursor-pointer relative flex justify-center"
+                onClick={() => setMenuDisplay((preve) => !preve)}
+              >
+                {user?.profilePic ? (
+                  <img
+                    src={ProfilePic}
+                    alt={name}
+                    className="w-10 h-10 rounded-full"
+                  />
+                ) : (
+                  <FaRegCircleUser />
+                )}
+              </div>
+            )}
             {menuDisplay && (
               <div className="absolute bg-white bottom-0 top-11 h-fit p-2 shadow-lg rounded">
                 <nav>
-                  <Link
-                    to={"admin-panel"}
-                    className="whitespace-nowrap hover:bg-slate-100 hidden md:block p-2"
-                    onClick={() => setMenuDisplay((preve) => !preve)}
-                  >
-                    Admin Panel
-                  </Link>
+                  {user?.role === ROLE.ADMIN && (
+                    <Link
+                      to={"admin-panel"}
+                      className="whitespace-nowrap hover:bg-slate-100 hidden md:block p-2"
+                      onClick={() => setMenuDisplay((preve) => !preve)}
+                    >
+                      Admin Panel
+                    </Link>
+                  )}
                 </nav>
               </div>
             )}

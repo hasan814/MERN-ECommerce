@@ -6,4 +6,5 @@ export const SummaryApi = {
   current_user: { url: `${backendDomin}/api/user-details`, method: "get" },
   logout_user: { url: `${backendDomin}/api/userLogout`, method: "get" },
   allUsers: { url: `${backendDomin}/api/all-users`, method: "get" },
+  updateUser: { url: `${backendDomin}/api/update-user`, method: "post" },
 };

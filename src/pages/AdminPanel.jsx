@@ -1,13 +1,23 @@
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { FaRegCircleUser } from "react-icons/fa6";
-import { Link, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { ROLE } from "../utils/role";
 
 const AdminPanel = () => {
+  // ============ Navigate ============
+  const navigate = useNavigate();
+
   // ============ Selector ============
   const user = useSelector((state) => state?.user?.user);
   const profilePic = user?.profilePic;
   const name = user?.name;
   const role = user?.role;
+
+  // ============ Effect ============
+  useEffect(() => {
+    if (user?.role !== ROLE.ADMIN) navigate("/");
+  }, [user?.role, navigate]);
 
   // ============ Rendering ============
   return (
@@ -30,10 +40,16 @@ const AdminPanel = () => {
         </div>
         <div>
           <nav className="grid">
-            <Link to={"all-users"} className="px-2 py-1 hover:bg-slate-100">
+            <Link
+              to={"/admin-panel/all-users"}
+              className="px-2 py-1 hover:bg-slate-100"
+            >
               All Users
             </Link>
-            <Link to={"all-products"} className="px-2 py-1 hover:bg-slate-100">
+            <Link
+              to={"/admin-panel/all-products"}
+              className="px-2 py-1 hover:bg-slate-100"
+            >
               Products
             </Link>
           </nav>

@@ -9,6 +9,13 @@ import ChangeUserRole from "./ChangeUserRole";
 const AllUsers = () => {
   // ============ State ===============
   const [allUsers, setAllUsers] = useState([]);
+  const [openUpdateRole, setOpenUpdateRole] = useState(false);
+  const [updateUserDetails, setUpdateUserDetails] = useState({
+    name: "",
+    email: "",
+    role: "",
+    _id: "",
+  });
 
   // ============ Function ===============
   const fetchAllUsers = async () => {
@@ -31,7 +38,7 @@ const AllUsers = () => {
     <div className="bg-white pb-4">
       <table className="w-full userTable">
         <thead>
-          <tr>
+          <tr className="bg-black text-white ">
             <th>Sr.</th>
             <th>Name</th>
             <th>Email</th>
@@ -49,7 +56,12 @@ const AllUsers = () => {
               <td>{user?.role}</td>
               <td>{moment(user?.createdAt).format("LL")}</td>
               <td>
-                <button className="bg-green-100 p-2 rounded-full hover:bg-green-500 hover:text-white">
+                <button
+                  onClick={() => {
+                    setUpdateUserDetails(user), setOpenUpdateRole(true);
+                  }}
+                  className="bg-green-100 p-2 rounded-full hover:bg-green-500 hover:text-white"
+                >
                   <MdModeEdit />
                 </button>
               </td>
@@ -57,7 +69,16 @@ const AllUsers = () => {
           ))}
         </tbody>
       </table>
-      <ChangeUserRole />
+      {openUpdateRole && (
+        <ChangeUserRole
+          onClose={() => setOpenUpdateRole(false)}
+          userId={updateUserDetails._id}
+          email={updateUserDetails.email}
+          name={updateUserDetails.name}
+          role={updateUserDetails.role}
+          callFunc={fetchAllUsers}
+        />
+      )}
     </div>
   );
 };
