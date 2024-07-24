@@ -4,6 +4,7 @@ import { MdModeEdit } from "react-icons/md";
 import { SummaryApi } from "../utils/Api";
 import { toast } from "react-toastify";
 import moment from "moment";
+import ChangeUserRole from "./ChangeUserRole";
 
 const AllUsers = () => {
   // ============ State ===============
@@ -56,6 +57,7 @@ const AllUsers = () => {
           ))}
         </tbody>
       </table>
+      <ChangeUserRole />
     </div>
   );
 };
