@@ -27,7 +27,7 @@ const App = () => {
   // ============ Effect =============
   useEffect(() => {
     fetchUserDetails();
-  }, []);
+  });
 
   // ============ Rendering =============
   return (

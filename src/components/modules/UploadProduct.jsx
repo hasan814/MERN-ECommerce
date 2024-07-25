@@ -1,12 +1,14 @@
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { productCategory } from "../../utils/productCategory";
+import { SummaryApi } from "../../utils/Api";
 import { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { CgClose } from "react-icons/cg";
+import { toast } from "react-toastify";
 
 import uploadImage from "../../utils/uploadImage";
-import PropTypes from "prop-types";
 import DisplayImage from "./DisplayImage";
+import PropTypes from "prop-types";
 
 const UploadProduct = ({ onClose }) => {
   // =========== State =============
@@ -41,25 +43,26 @@ const UploadProduct = ({ onClose }) => {
   };
 
   const handleDeleteProductImage = (index) => {
-    console.log("index imgae", index);
     const newProductImage = [...data.productImage];
     newProductImage.splice(index, 1);
-
-    setData((prev) => ({ ...prev, productImage: [...newProductImage] }));
+    setData((prev) => ({ ...prev, productImage: newProductImage }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(data);
-    // Here you would typically make a request to your server to save the product
-    // For example:
-    // axios.post('/api/products', data)
-    //   .then(response => {
-    //     console.log('Product saved', response.data);
-    //   })
-    //   .catch(error => {
-    //     console.error('There was an error saving the product!', error);
-    //   });
+    const response = await fetch(SummaryApi.uploadProduct.url, {
+      method: SummaryApi.uploadProduct.method,
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const responseData = await response.json();
+    if (responseData.success) {
+      toast.success(responseData.message);
+      onClose();
+    } else {
+      toast.error(responseData.message);
+    }
   };
 
   // =========== Rendering =============
@@ -140,7 +143,7 @@ const UploadProduct = ({ onClose }) => {
             </div>
           </label>
           <div>
-            {data?.productImage[0] ? (
+            {data.productImage.length > 0 ? (
               <div className="flex items-center gap-2">
                 {data.productImage.map((item, index) => (
                   <div key={index} className="relative group">
@@ -151,7 +154,8 @@ const UploadProduct = ({ onClose }) => {
                       height={80}
                       className="bg-slate-100 border cursor-pointer"
                       onClick={() => {
-                        setOpenFullSCreenImage(true), setFullScreenImage(item);
+                        setOpenFullSCreenImage(true);
+                        setFullScreenImage(item);
                       }}
                     />
                     <div
@@ -183,7 +187,7 @@ const UploadProduct = ({ onClose }) => {
 
           <label htmlFor="sellingPrice">Selling Price: </label>
           <input
-            type="text"
+            type="number"
             id="sellingPrice"
             name="sellingPrice"
             value={data.sellingPrice}
@@ -194,11 +198,13 @@ const UploadProduct = ({ onClose }) => {
 
           <label htmlFor="description">Description: </label>
           <textarea
-            className="h-28 bg-slate-100 border resize-none p-1"
-            placeholder="Enter Product Description"
-            rows={3}
+            id="description"
             name="description"
+            value={data.description}
             onChange={changeHandler}
+            placeholder="Enter Product Description"
+            className="h-28 bg-slate-100 border resize-none p-1"
+            rows={3}
           ></textarea>
 
           <button
