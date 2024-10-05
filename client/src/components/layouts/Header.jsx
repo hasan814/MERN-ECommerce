@@ -1,12 +1,17 @@
 import { IoSearchSharp } from "react-icons/io5";
 import { FaShoppingCart } from "react-icons/fa";
 import { HiMiniUser } from "react-icons/hi2";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
+  // ============== Route ===============
+  const navigate = useNavigate();
+
+  // ============== Rendering ===============
   return (
     <header className="h-16 shadow-lg">
       <div className="container mx-auto flex items-center justify-between px-6">
-        <div className="">
+        <div className="cursor-pointer" onClick={() => navigate("/")}>
           <img
             width="60"
             height="40"
@@ -37,9 +42,12 @@ const Header = () => {
             </div>
           </div>
           <div>
-            <button className="px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700">
+            <Link
+              to={"/login"}
+              className="px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700"
+            >
               Login
-            </button>
+            </Link>
           </div>
         </div>
       </div>
