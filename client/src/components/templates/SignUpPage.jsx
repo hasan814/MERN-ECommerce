@@ -2,6 +2,7 @@ import { RiUser6Fill } from "react-icons/ri";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { imageTobase } from "../../utils/imageTobase";
 
 const SignUpPage = () => {
   // =============== State ===============
@@ -28,12 +29,10 @@ const SignUpPage = () => {
   };
 
   // =============== Upload Function ===============
-  const uploadFileHandler = (event) => {
+  const uploadFileHandler = async (event) => {
     const file = event.target.files[0];
-    if (file) {
-      console.log(file);
-      setData({ ...data, profilePic: file });
-    }
+    const imagePic = await imageTobase(file);
+    setData({ ...data, profilePic: imagePic });
   };
 
   // =============== Rendering ===============
@@ -43,13 +42,22 @@ const SignUpPage = () => {
         <div className="bg-transparent shadow-lg border rounded-lg p-2 py-5 w-full max-w-md mx-auto neumorphic-container">
           <div className="my-3 flex flex-col cursor-pointer">
             <div>
-              <RiUser6Fill className="mx-auto" size={40} />
+              {data.profilePic ? (
+                <img
+                  src={data.profilePic}
+                  alt="profilePic"
+                  className="w-20 h-20 mx-auto"
+                />
+              ) : (
+                <RiUser6Fill className="mx-auto" size={40} />
+              )}
             </div>
             <form className="mx-auto cursor-pointer">
               <label>
                 <div className="text-xs">Upload Photo</div>
                 <input
                   type="file"
+                  required
                   className="hidden"
                   onChange={uploadFileHandler}
                 />
@@ -61,6 +69,7 @@ const SignUpPage = () => {
               <label className="block text-gray-700">Name:</label>
               <div>
                 <input
+                  required
                   type="text"
                   name="name"
                   value={data.name}
@@ -74,6 +83,7 @@ const SignUpPage = () => {
               <label className="block text-gray-700">Email:</label>
               <div>
                 <input
+                  required
                   type="email"
                   name="email"
                   value={data.email}
@@ -87,6 +97,7 @@ const SignUpPage = () => {
               <label className="block text-gray-700">Password:</label>
               <div className="relative">
                 <input
+                  required
                   name="password"
                   value={data.password}
                   onChange={changeHandler}
@@ -106,6 +117,7 @@ const SignUpPage = () => {
               <label className="block text-gray-700">Confirm Password:</label>
               <div className="relative">
                 <input
+                  required
                   name="confirmPassword"
                   onChange={changeHandler}
                   value={data.confirmPassword}
