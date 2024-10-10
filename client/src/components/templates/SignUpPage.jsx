@@ -1,10 +1,16 @@
-import { RiUser6Fill } from "react-icons/ri";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { RiUser6Fill } from "react-icons/ri";
 import { imageTobase } from "../../utils/imageTobase";
+import { SummaryApi } from "../../common";
+import { useState } from "react";
+
+import toast from "react-hot-toast";
 
 const SignUpPage = () => {
+  // =============== Navigate ===============
+  const navigate = useNavigate();
+
   // =============== State ===============
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -23,9 +29,28 @@ const SignUpPage = () => {
   };
 
   // =============== Submit Function ===============
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
-    console.log(data);
+    if (data.password !== data.confirmPassword) {
+      toast.error("Passwords are not the same!");
+      return;
+    }
+    try {
+      const response = await fetch(SummaryApi.signUp.url, {
+        method: SummaryApi.signUp.method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const responseData = await response.json();
+      if (response.ok) {
+        toast.success(responseData.message);
+        navigate("/login");
+      } else {
+        toast.error(responseData.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // =============== Upload Function ===============

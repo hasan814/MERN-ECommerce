@@ -12,6 +12,7 @@ const userSchema = new Schema(
     },
     password: { type: String, required: true, minlength: 6 },
     profilePic: { type: String },
+    role: { type: String, enum: ["ADMIN", "GENERAL"], default: "GENERAL" },
   },
   { timestamps: true }
 );
