@@ -1,15 +1,37 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
+import { setUserDetails } from "../../store/userSlice";
 import { IoSearchSharp } from "react-icons/io5";
-import { useSelector } from "react-redux";
 import { HiMiniUser } from "react-icons/hi2";
+import { SummaryApi } from "../../common";
+
+import toast from "react-hot-toast";
 
 const Header = () => {
   // ============== Redux ===============
   const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   // ============== Route ===============
   const navigate = useNavigate();
+
+  // ============== Function ===============
+  const logoutHandler = async () => {
+    try {
+      const response = await fetch(SummaryApi.signOut.url, {
+        method: SummaryApi.signOut.method,
+        credentials: "include",
+      });
+      const responseData = await response.json();
+      if (responseData.success) {
+        toast.success(responseData.message);
+        dispatch(setUserDetails(null));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // ============== Rendering ===============
   return (
@@ -55,12 +77,21 @@ const Header = () => {
             </div>
           </div>
           <div>
-            <Link
-              to={"/login"}
-              className="px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700"
-            >
-              Login
-            </Link>
+            {user ? (
+              <button
+                onClick={logoutHandler}
+                className="px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700"
+              >
+                LogOut
+              </button>
+            ) : (
+              <Link
+                to={"/login"}
+                className="px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700"
+              >
+                Login
+              </Link>
+            )}
           </div>
         </div>
       </div>
