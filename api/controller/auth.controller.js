@@ -65,7 +65,8 @@ export const signin = async (req, res) => {
     if (!isMatch)
       return res.status(401).json({ message: "Invalid email or Password" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    const tokenData = { id: user._id, email: user.email };
+    const token = jwt.sign(tokenData, process.env.JWT_SECRET, {
       expiresIn: "24h",
     });
 
@@ -77,7 +78,7 @@ export const signin = async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000,
       })
       .status(200)
-      .json(rest);
+      .json({ message: "Sign In Successfully", data: rest });
   } catch (error) {
     return res
       .status(500)

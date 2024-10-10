@@ -1,10 +1,16 @@
+import { Link, useNavigate } from "react-router-dom";
 import { RiUser6Fill } from "react-icons/ri";
 import { FaEyeSlash } from "react-icons/fa";
+import { SummaryApi } from "../../common";
 import { useState } from "react";
 import { FaEye } from "react-icons/fa";
-import { Link } from "react-router-dom";
+
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
+  // =============== Navigate ===============
+  const navigate = useNavigate();
+
   // =============== State ===============
   const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({ email: "", password: "" });
@@ -16,9 +22,25 @@ const LoginPage = () => {
   };
 
   // =============== Submit Function ===============
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
-    console.log(data);
+    try {
+      const response = await fetch(SummaryApi.signIn.url, {
+        method: SummaryApi.signIn.method,
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const responseData = await response.json();
+      if (response.ok) {
+        toast.success(responseData.message);
+        navigate("/");
+      } else {
+        toast.error(responseData.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // =============== Rendering ===============
