@@ -1,13 +1,17 @@
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { RiUser6Fill } from "react-icons/ri";
 import { FaEyeSlash } from "react-icons/fa";
 import { SummaryApi } from "../../common";
-import { useState } from "react";
+import { Context } from "../../context";
 import { FaEye } from "react-icons/fa";
 
 import toast from "react-hot-toast";
 
 const LoginPage = () => {
+  // =============== Context ===============
+  const { fetchUserDetails } = useContext(Context);
+
   // =============== Navigate ===============
   const navigate = useNavigate();
 
@@ -35,6 +39,7 @@ const LoginPage = () => {
       if (response.ok) {
         toast.success(responseData.message);
         navigate("/");
+        fetchUserDetails();
       } else {
         toast.error(responseData.message);
       }
