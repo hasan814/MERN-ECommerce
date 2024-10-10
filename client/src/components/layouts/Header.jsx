@@ -1,9 +1,13 @@
-import { IoSearchSharp } from "react-icons/io5";
-import { FaShoppingCart } from "react-icons/fa";
-import { HiMiniUser } from "react-icons/hi2";
 import { Link, useNavigate } from "react-router-dom";
+import { FaShoppingCart } from "react-icons/fa";
+import { IoSearchSharp } from "react-icons/io5";
+import { useSelector } from "react-redux";
+import { HiMiniUser } from "react-icons/hi2";
 
 const Header = () => {
+  // ============== Redux ===============
+  const { user } = useSelector((state) => state.user);
+
   // ============== Route ===============
   const navigate = useNavigate();
 
@@ -31,8 +35,17 @@ const Header = () => {
         </div>
         <div className="flex items-center gap-4">
           <div className="text-3xl cursor-pointer">
-            <HiMiniUser />
+            {user ? (
+              <img
+                src={user.profilePic}
+                className="w-9 h-10 rounded-full"
+                alt="User profile picture"
+              />
+            ) : (
+              <HiMiniUser />
+            )}
           </div>
+
           <div className="text-2xl relative">
             <span>
               <FaShoppingCart />
