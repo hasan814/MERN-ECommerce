@@ -5,10 +5,14 @@ import { setUserDetails } from "../../store/userSlice";
 import { IoSearchSharp } from "react-icons/io5";
 import { HiMiniUser } from "react-icons/hi2";
 import { SummaryApi } from "../../common";
+import { useState } from "react";
 
 import toast from "react-hot-toast";
 
 const Header = () => {
+  // ============== State ===============
+  const [menuDisplay, setMenuDisplay] = useState(false);
+
   // ============== Redux ===============
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -56,15 +60,27 @@ const Header = () => {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <div className="text-3xl cursor-pointer">
-            {user ? (
-              <img
-                src={user.profilePic}
-                className="w-9 h-10 rounded-full"
-                alt="User profile picture"
-              />
-            ) : (
-              <HiMiniUser />
+          <div
+            className="relative group flex justify-center"
+            onClick={() => setMenuDisplay((prev) => !prev)}
+          >
+            <div className="text-3xl cursor-pointer">
+              {user ? (
+                <img
+                  src={user.profilePic}
+                  className="w-9 h-10 rounded-full"
+                  alt="User profile picture"
+                />
+              ) : (
+                <HiMiniUser />
+              )}
+            </div>
+            {menuDisplay && (
+              <div className="absolute transition-all duration-300 bg-blue-300 whitespace-nowrap bottom-0 top-11 h-fit p-2 shadow-lg rounded">
+                <nav>
+                  <Link to={"admin-panel"}>Admin Panel</Link>
+                </nav>
+              </div>
             )}
           </div>
 
