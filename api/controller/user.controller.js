@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 
+// =============== Current User Details ===============
 export const userDetailsController = async (req, res) => {
   try {
     const userId = req.userId;
@@ -30,5 +31,25 @@ export const userDetailsController = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Server error, Please try again later", error: true });
+  }
+};
+
+// =============== All Users ===============
+
+export const AllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select("-password");
+
+    return res.status(200).json({
+      success: true,
+      error: false,
+      data: users,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Server error. Unable to fetch users.",
+      error: true,
+    });
   }
 };
