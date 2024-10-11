@@ -3,6 +3,7 @@ import { SummaryApi } from "../../common";
 import { MdEdit } from "react-icons/md";
 
 import Loader from "../modules/Loader";
+import ChangeUserRole from "../modules/ChangeUserRole";
 
 const AllUsersPage = () => {
   // ============= State ==============
@@ -85,6 +86,7 @@ const AllUsersPage = () => {
       ) : (
         <p>No users found.</p>
       )}
+      <ChangeUserRole />
     </div>
   );
 };
