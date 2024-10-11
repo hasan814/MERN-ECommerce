@@ -35,7 +35,6 @@ export const userDetailsController = async (req, res) => {
 };
 
 // =============== All Users ===============
-
 export const AllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password");
@@ -50,6 +49,54 @@ export const AllUsers = async (req, res) => {
       success: false,
       message: error.message || "Server error. Unable to fetch users.",
       error: true,
+    });
+  }
+};
+
+// =============== Update User ===============
+export const updateUser = async (req, res) => {
+  try {
+    const sessionUserId = req.userId;
+    const { userId, name, email, role } = req.body;
+
+    const sessionUser = await User.findById(sessionUserId);
+    if (!sessionUser) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized. User not found.",
+      });
+    }
+
+    if (sessionUser.role !== "admin" && sessionUserId !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied. You are not allowed to update this user.",
+      });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { name, email, role },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    return res.status(200).json({
+      message: "User updated successfully.",
+      success: true,
+      data: updatedUser,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: true,
+      message: error.message || "Server error. Could not update user.",
     });
   }
 };
