@@ -1,10 +1,19 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { HiMiniUser } from "react-icons/hi2";
+import { useEffect } from "react";
 
 const AdminPanelPage = () => {
+  // =========== Navigate ============
+  const navigate = useNavigate();
+
   // =========== Redux ============
   const { user } = useSelector((state) => state.user);
+
+  // =========== Effect ============
+  useEffect(() => {
+    if (user?.role !== "ADMIN") navigate("/");
+  }, [user, navigate]);
 
   // =========== Rendering ============
   return (

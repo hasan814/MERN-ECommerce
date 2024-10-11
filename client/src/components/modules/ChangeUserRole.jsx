@@ -7,7 +7,14 @@ import { ROLE } from "../../common/role";
 import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 
-const ChangeUserRole = ({ name, email, role, userId, onClose }) => {
+const ChangeUserRole = ({
+  name,
+  email,
+  role,
+  userId,
+  onClose,
+  fetchAllUsers,
+}) => {
   // ============== State ==============
   const [userRole, setUserRole] = useState(role);
 
@@ -35,8 +42,8 @@ const ChangeUserRole = ({ name, email, role, userId, onClose }) => {
         return;
       }
       toast.success(responseData.message);
-
       onClose();
+      fetchAllUsers();
     } catch (error) {
       console.error("An error occurred:", error.message);
       toast.error("Failed to update user role.");
@@ -106,6 +113,7 @@ ChangeUserRole.propTypes = {
   role: PropTypes.oneOf(Object.values(ROLE)).isRequired,
   userId: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
+  fetchAllUsers: PropTypes.func.isRequired,
 };
 
 export default ChangeUserRole;

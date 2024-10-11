@@ -64,27 +64,31 @@ const Header = () => {
             className="relative group flex justify-center"
             onClick={() => setMenuDisplay((prev) => !prev)}
           >
-            <div className="text-3xl cursor-pointer">
-              {user ? (
-                <img
-                  src={user.profilePic}
-                  className="w-9 h-10 rounded-full"
-                  alt="User profile picture"
-                />
-              ) : (
-                <HiMiniUser />
-              )}
-            </div>
+            {user && (
+              <div className="text-3xl cursor-pointer">
+                {user ? (
+                  <img
+                    src={user.profilePic || "/src/assets/react.svg"}
+                    className="w-9 h-10 rounded-full"
+                    alt="User profile picture"
+                  />
+                ) : (
+                  <HiMiniUser />
+                )}
+              </div>
+            )}
             {menuDisplay && (
               <div className="absolute transition-all duration-300 bg-blue-300 whitespace-nowrap bottom-0 top-11 h-fit p-2 shadow-lg rounded">
-                <nav>
-                  <Link
-                    to={"admin-panel"}
-                    className="whitespace-nowrap hidden md:block"
-                  >
-                    Admin Panel
-                  </Link>
-                </nav>
+                {user?.role === "ADMIN" && (
+                  <nav>
+                    <Link
+                      to={"admin-panel"}
+                      className="whitespace-nowrap hidden md:block"
+                    >
+                      Admin Panel
+                    </Link>
+                  </nav>
+                )}
               </div>
             )}
           </div>

@@ -2,21 +2,21 @@ import { useEffect, useState } from "react";
 import { SummaryApi } from "../../common";
 import { MdEdit } from "react-icons/md";
 
-import Loader from "../modules/Loader";
 import ChangeUserRole from "../modules/ChangeUserRole";
+import Loader from "../modules/Loader";
 
 const AllUsersPage = () => {
   // ============= State ==============
   const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedUser, setSelectedUser] = useState(null); // To handle selected user for editing
+  const [selectedUser, setSelectedUser] = useState(null);
 
   // ============= Function ==============
   const fetchAllUsers = async () => {
     try {
       setLoading(true);
-      setError(null); // Reset error before new fetch
+      setError(null);
       const response = await fetch(SummaryApi.all_users.url, {
         method: SummaryApi.all_users.method,
         credentials: "include",
@@ -42,11 +42,11 @@ const AllUsersPage = () => {
 
   // ============= Handlers ==============
   const handleEditUser = (user) => {
-    setSelectedUser(user); // Set the selected user to open modal
+    setSelectedUser(user);
   };
 
   const handleCloseModal = () => {
-    setSelectedUser(null); // Close the modal by clearing selected user
+    setSelectedUser(null);
   };
 
   // ============= Rendering ==============
@@ -108,6 +108,7 @@ const AllUsersPage = () => {
           role={selectedUser.role}
           userId={selectedUser._id}
           onClose={handleCloseModal}
+          fetchAllUsers={fetchAllUsers}
         />
       )}
     </div>
