@@ -10,6 +10,7 @@ const AllUsersPage = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null); // To handle selected user for editing
 
   // ============= Function ==============
   const fetchAllUsers = async () => {
@@ -38,6 +39,15 @@ const AllUsersPage = () => {
   useEffect(() => {
     fetchAllUsers();
   }, []);
+
+  // ============= Handlers ==============
+  const handleEditUser = (user) => {
+    setSelectedUser(user); // Set the selected user to open modal
+  };
+
+  const handleCloseModal = () => {
+    setSelectedUser(null); // Close the modal by clearing selected user
+  };
 
   // ============= Rendering ==============
   if (loading)
@@ -75,7 +85,10 @@ const AllUsersPage = () => {
                   {new Date(user.createdAt).toLocaleDateString()}
                 </td>
                 <td>
-                  <button className="bg-red-100 hover:bg-red-400 hover:text-white transition-all duration-300 p-2 rounded-full cursor-pointer">
+                  <button
+                    className="bg-red-100 hover:bg-red-400 hover:text-white transition-all duration-300 p-2 rounded-full cursor-pointer"
+                    onClick={() => handleEditUser(user)}
+                  >
                     <MdEdit />
                   </button>
                 </td>
@@ -86,7 +99,17 @@ const AllUsersPage = () => {
       ) : (
         <p>No users found.</p>
       )}
-      <ChangeUserRole />
+
+      {/* Render ChangeUserRole modal conditionally */}
+      {selectedUser && (
+        <ChangeUserRole
+          name={selectedUser.name}
+          email={selectedUser.email}
+          role={selectedUser.role}
+          userId={selectedUser._id}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 };

@@ -1,9 +1,13 @@
 import { v4 as uuidv4 } from "uuid";
+import { SummaryApi } from "../../common/index";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { ROLE } from "../../common/role";
 
-const ChangeUserRole = ({ name, email, role, onClose }) => {
+import PropTypes from "prop-types";
+import toast from "react-hot-toast";
+
+const ChangeUserRole = ({ name, email, role, userId, onClose }) => {
   // ============== State ==============
   const [userRole, setUserRole] = useState(role);
 
@@ -13,7 +17,32 @@ const ChangeUserRole = ({ name, email, role, onClose }) => {
   };
 
   // ============== Update Function ==============
-  const updateUserRole = async () => {};
+  const updateUserRole = async () => {
+    try {
+      const response = await fetch(SummaryApi.update_user.url, {
+        method: SummaryApi.update_user.method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: userId,
+          role: userRole,
+        }),
+        credentials: "include",
+      });
+
+      const responseData = await response.json();
+      if (!response.ok) {
+        toast.error(responseData.message);
+        return;
+      }
+      toast.success(responseData.message);
+
+      onClose();
+    } catch (error) {
+      console.error("An error occurred:", error.message);
+      toast.error("Failed to update user role.");
+    }
+  };
+
   // ============== Rendering ==============
   return (
     <div className="fixed inset-0 w-full h-full z-10 flex justify-center items-center bg-gray-50 bg-opacity-80">
@@ -68,6 +97,15 @@ const ChangeUserRole = ({ name, email, role, onClose }) => {
       </div>
     </div>
   );
+};
+
+// ============== Prop Types ==============
+ChangeUserRole.propTypes = {
+  name: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+  role: PropTypes.oneOf(Object.values(ROLE)).isRequired,
+  userId: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default ChangeUserRole;

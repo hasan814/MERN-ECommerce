@@ -57,6 +57,7 @@ export const AllUsers = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const sessionUserId = req.userId;
+    console.log(req.body);
     const { userId, name, email, role } = req.body;
 
     const sessionUser = await User.findById(sessionUserId);
@@ -67,7 +68,7 @@ export const updateUser = async (req, res) => {
       });
     }
 
-    if (sessionUser.role !== "admin" && sessionUserId !== userId) {
+    if (sessionUser.role !== "ADMIN" && sessionUserId !== userId) {
       return res.status(403).json({
         success: false,
         message: "Access denied. You are not allowed to update this user.",
