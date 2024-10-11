@@ -49,7 +49,7 @@ const Header = () => {
             alt="small-business"
           />
         </div>
-        <div className="flex items-center">
+        <div className="md:flex hidden items-center">
           <input
             type="text"
             className="border px-2 rounded-l-md h-7"
@@ -78,7 +78,12 @@ const Header = () => {
             {menuDisplay && (
               <div className="absolute transition-all duration-300 bg-blue-300 whitespace-nowrap bottom-0 top-11 h-fit p-2 shadow-lg rounded">
                 <nav>
-                  <Link to={"admin-panel"}>Admin Panel</Link>
+                  <Link
+                    to={"admin-panel"}
+                    className="whitespace-nowrap hidden md:block"
+                  >
+                    Admin Panel
+                  </Link>
                 </nav>
               </div>
             )}
