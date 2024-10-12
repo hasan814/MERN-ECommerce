@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import path from "path";
 
-import authRouter from "./routes/product.route.js";
+import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js";
 import productRouter from "./routes/product.route.js";
 

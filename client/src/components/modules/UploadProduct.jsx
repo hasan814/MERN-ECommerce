@@ -2,12 +2,14 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import { productCategory } from "../../utils/productCategory";
 import { v4 as uuidv4 } from "uuid";
 import { uploadImage } from "../../utils/uploadImage";
+import { SummaryApi } from "../../common";
 import { MdDelete } from "react-icons/md";
 import { useState } from "react";
 import { CgClose } from "react-icons/cg";
 
 import DisplayImage from "./DisplayImage";
 import PropTypes from "prop-types";
+import toast from "react-hot-toast";
 
 const UploadProduct = ({ onClose }) => {
   // =============== State ================
@@ -32,10 +34,25 @@ const UploadProduct = ({ onClose }) => {
     }));
   };
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    console.log("Form Data Submitted:", data);
-    onClose();
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch(SummaryApi.upload_product.url, {
+        method: SummaryApi.upload_product.method,
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const responseData = await response.json();
+      if (response.ok) {
+        toast.success(responseData.message);
+        onClose();
+      } else {
+        toast.error(responseData.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const uploadProductHandler = async (event) => {
