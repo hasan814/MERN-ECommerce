@@ -32,7 +32,7 @@ const UploadProduct = ({ onClose }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
     console.log("Form Data Submitted:", data);
     onClose();
@@ -67,7 +67,7 @@ const UploadProduct = ({ onClose }) => {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="">
+        <form onSubmit={submitHandler} className="">
           <div className="grid grid-cols-1 gap-4">
             <div>
               <label className="block text-sm font-medium">Product Name</label>
@@ -94,11 +94,11 @@ const UploadProduct = ({ onClose }) => {
             <div>
               <label className="block text-sm font-medium">Category</label>
               <select
+                required
                 name="category"
                 value={data.category}
                 onChange={handleInputChange}
                 className="w-full p-2 border rounded"
-                required
               >
                 <option value="">Select a category</option>
                 {productCategory.map((category) => (
