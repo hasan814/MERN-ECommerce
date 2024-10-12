@@ -7,4 +7,8 @@ export const SummaryApi = {
   all_users: { url: `${backendDomin}/api/user/all-users`, method: "GET" },
   update_user: { url: `${backendDomin}/api/user/update-user`, method: "POST" },
   current_user: { url: `${backendDomin}/api/user/user-details`, method: "GET" },
+  upload_product: {
+    url: `${backendDomin}/api/user/upload-product`,
+    method: "POST",
+  },
 };
