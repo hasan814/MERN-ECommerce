@@ -1,21 +1,26 @@
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { productCategory } from "../../utils/productCategory";
+import { v4 as uuidv4 } from "uuid";
+import { uploadImage } from "../../utils/uploadImage";
+import { MdDelete } from "react-icons/md";
 import { useState } from "react";
 import { CgClose } from "react-icons/cg";
 
+import DisplayImage from "./DisplayImage";
 import PropTypes from "prop-types";
 
 const UploadProduct = ({ onClose }) => {
   // =============== State ================
-  const [uploadProductImageInput, setUploadProductImageInput] = useState("");
+  const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
+  const [fullScreenImage, setFullScreenImage] = useState("");
   const [data, setData] = useState({
-    productName: "",
-    brandName: "",
-    category: "",
-    productImage: "",
-    description: "",
     price: "",
+    category: "",
     selling: "",
+    brandName: "",
+    productName: "",
+    description: "",
+    productImage: "",
   });
 
   // =============== Handlers ================
@@ -33,10 +38,19 @@ const UploadProduct = ({ onClose }) => {
     onClose();
   };
 
-  const uploadProductHandler = (event) => {
+  const uploadProductHandler = async (event) => {
     const file = event.target.files[0];
-    setUploadProductImageInput(file.name);
-    console.log(file);
+    const uploadImageCloudinary = await uploadImage(file);
+    setData((prevData) => ({
+      ...prevData,
+      productImage: [...prevData.productImage, uploadImageCloudinary.url],
+    }));
+  };
+
+  const deleteProductHandler = async (index) => {
+    const newProductImage = [...data.productImage];
+    newProductImage.splice(index, 1);
+    setData((prev) => ({ ...prev, productImage: [...newProductImage] }));
   };
 
   // =============== Rendering ================
@@ -95,9 +109,7 @@ const UploadProduct = ({ onClose }) => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium">
-                Product Image URL
-              </label>
+              <label className="block text-sm font-medium">Product Image</label>
               <label htmlFor="UploadImageInput">
                 <div className="p-2 bg-slate-100 border rounded h-32 w-full cursor-pointer">
                   <div className="text-slate-500 flex items-center justify-center gap-2 flex-col">
@@ -115,13 +127,33 @@ const UploadProduct = ({ onClose }) => {
                 </div>
               </label>
               <div>
-                <img
-                  src=""
-                  alt=""
-                  height={80}
-                  width={80}
-                  className="bg-slate-100 border"
-                />
+                {data?.productImage?.length > 0 ? (
+                  <div className="flex items-center gap-2">
+                    {data.productImage.map((item, index) => (
+                      <div key={uuidv4()} className="relative group">
+                        <img
+                          alt="item"
+                          width={80}
+                          src={item}
+                          height={80}
+                          className="bg-slate-100 border"
+                          onClick={() => {
+                            setOpenFullScreenImage(true);
+                            setFullScreenImage(item);
+                          }}
+                        />
+                        <div
+                          onClick={() => deleteProductHandler(index)}
+                          className="cursor-pointer absolute bottom-0 right-0 p-1 text-white bg-red-600 rounded-full hidden group-hover:block"
+                        >
+                          <MdDelete />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="">*Please Upload Product Image</p>
+                )}
               </div>
             </div>
             <div>
@@ -149,28 +181,32 @@ const UploadProduct = ({ onClose }) => {
               <label className="block text-sm font-medium">
                 Selling Status
               </label>
-              <select
+              <input
+                id="selling"
+                type="number"
                 name="selling"
                 value={data.selling}
                 onChange={handleInputChange}
                 className="w-full p-2 border rounded"
-                required
-              >
-                <option value="">Select Status</option>
-                <option value="For Sale">For Sale</option>
-                <option value="Not for Sale">Not for Sale</option>
-              </select>
+              />
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full mt-4 bg-green-500 text-white p-2 rounded hover:bg-green-700 transition"
+            className="w-full mt-4 bg-red-500 text-white p-2 rounded hover:bg-red-700 transition"
           >
             Submit Product
           </button>
         </form>
       </div>
+      {/* Display Image Full Screen */}
+      {openFullScreenImage && (
+        <DisplayImage
+          onClose={() => setOpenFullScreenImage(false)}
+          imgUrl={fullScreenImage}
+        />
+      )}
     </div>
   );
 };
