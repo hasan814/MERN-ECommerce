@@ -11,4 +11,8 @@ export const SummaryApi = {
     url: `${backendDomin}/api/product/upload-product`,
     method: "POST",
   },
+  get_product: {
+    url: `${backendDomin}/api/product/get-product`,
+    method: "GET",
+  },
 };

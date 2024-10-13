@@ -2,6 +2,7 @@ import { uploadProductPermission } from "../utils/permission.js";
 
 import Product from "../models/product.model.js";
 
+// =============== Upload Product ================
 export const uploadProduct = async (req, res) => {
   try {
     const sessionUserId = req.userId;
@@ -51,6 +52,33 @@ export const uploadProduct = async (req, res) => {
   } catch (error) {
     return res.status(400).json({
       message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+// =============== Get Product ================
+export const getProduct = async (req, res) => {
+  try {
+    const allProduct = await productModel.find().sort({ createAt: -1 });
+    if (!allProduct || allProduct.length === 0) {
+      return res.status(404).json({
+        message: "No products found",
+        success: false,
+        error: true,
+        data: [],
+      });
+    }
+    return res.status(200).json({
+      message: "All Products",
+      success: true,
+      error: false,
+      data: allProduct,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || "Internal server error",
       error: true,
       success: false,
     });
