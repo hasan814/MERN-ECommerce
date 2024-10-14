@@ -63,7 +63,11 @@ const AllProductsPage = () => {
             {allProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {allProducts.map((product) => (
-                  <AdminProductCard key={uuidv4()} data={product} />
+                  <AdminProductCard
+                    key={uuidv4()}
+                    data={product}
+                    fetchData={fetchAllProducts}
+                  />
                 ))}
               </div>
             ) : (
@@ -76,7 +80,10 @@ const AllProductsPage = () => {
       {/* Conditionally render the UploadProduct component */}
       {showUploadForm && (
         <div className="mb-6">
-          <UploadProduct onClose={handleCloseForm} />
+          <UploadProduct
+            onClose={handleCloseForm}
+            fetchData={fetchAllProducts}
+          />
         </div>
       )}
     </div>

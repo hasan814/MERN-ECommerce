@@ -11,7 +11,7 @@ import DisplayImage from "./DisplayImage";
 import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 
-const UploadProduct = ({ onClose }) => {
+const UploadProduct = ({ onClose, fetchData }) => {
   // =============== State ================
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
   const [fullScreenImage, setFullScreenImage] = useState("");
@@ -47,6 +47,7 @@ const UploadProduct = ({ onClose }) => {
       if (response.ok) {
         toast.success(responseData.message);
         onClose();
+        fetchData();
       } else {
         toast.error(responseData.message);
       }

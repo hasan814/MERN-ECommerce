@@ -84,3 +84,36 @@ export const getProduct = async (req, res) => {
     });
   }
 };
+
+// =============== Edit Product ================
+export const editProduct = async (req, res) => {
+  const sessionUserId = req.userId;
+
+  const hasPermission = await uploadProductPermission(sessionUserId);
+  if (!hasPermission) {
+    throw new Error("Permission Denied!");
+  }
+
+  const { _id, ...resBody } = req.body;
+
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(_id, resBody);
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    return res.status(200).json({
+      message: "Product updated successfully",
+      product: updatedProduct,
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};

@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { productCategory } from "../../utils/productCategory";
 import { v4 as uuidv4 } from "uuid";
@@ -9,13 +8,15 @@ import { useState } from "react";
 import { CgClose } from "react-icons/cg";
 
 import DisplayImage from "./DisplayImage";
+import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 
-const AdminEditProduct = ({ onClose, product }) => {
+const AdminEditProduct = ({ onClose, product, fetchData }) => {
   // =============== State ================
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
   const [fullScreenImage, setFullScreenImage] = useState("");
   const [data, setData] = useState({
+    ...product,
     price: product.price,
     category: product.category,
     selling: product.selling,
@@ -37,8 +38,8 @@ const AdminEditProduct = ({ onClose, product }) => {
   const submitHandler = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(SummaryApi.upload_product.url, {
-        method: SummaryApi.upload_product.method,
+      const response = await fetch(SummaryApi.edit_product.url, {
+        method: SummaryApi.edit_product.method,
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -47,6 +48,7 @@ const AdminEditProduct = ({ onClose, product }) => {
       if (response.ok) {
         toast.success(responseData.message);
         onClose();
+        fetchData();
       } else {
         toast.error(responseData.message);
       }
@@ -215,7 +217,7 @@ const AdminEditProduct = ({ onClose, product }) => {
             type="submit"
             className="w-full mt-4 bg-red-500 text-white p-2 rounded hover:bg-red-700 transition"
           >
-            Submit Product
+            Edit Product
           </button>
         </form>
       </div>
@@ -233,6 +235,7 @@ const AdminEditProduct = ({ onClose, product }) => {
 // ============== Prop Types ==============
 AdminEditProduct.propTypes = {
   onClose: PropTypes.func.isRequired,
+  fetchData: PropTypes.any,
   product: PropTypes.shape({
     price: PropTypes.number.isRequired,
     category: PropTypes.string.isRequired,
