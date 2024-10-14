@@ -6,6 +6,6 @@ import express from "express";
 const router = express.Router();
 
 router.post("/upload-product", authToken, uploadProduct);
-router.get("/get-product", authToken, getProduct);
+router.get("/get-product", getProduct);
 
 export default router;

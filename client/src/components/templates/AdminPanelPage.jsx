@@ -17,7 +17,7 @@ const AdminPanelPage = () => {
 
   // =========== Rendering ============
   return (
-    <div className="min-h-[calc(100vh-245px)] md:flex hidden">
+    <div className="min-h-[calc(100vh-245px)] sm:flex hidden">
       <aside className="my-3 w-full max-w-60 shadow-lg min-h-full">
         <div className="h-32 flex justify-center items-center flex-col gap-2">
           <div className="text-3xl cursor-pointer relative flex justify-center">

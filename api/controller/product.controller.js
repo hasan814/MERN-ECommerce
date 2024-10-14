@@ -61,7 +61,7 @@ export const uploadProduct = async (req, res) => {
 // =============== Get Product ================
 export const getProduct = async (req, res) => {
   try {
-    const allProduct = await productModel.find().sort({ createAt: -1 });
+    const allProduct = await Product.find().sort({ createAt: -1 });
     if (!allProduct || allProduct.length === 0) {
       return res.status(404).json({
         message: "No products found",
