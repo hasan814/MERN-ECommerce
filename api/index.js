@@ -24,8 +24,21 @@ const __dirname = path.resolve();
 
 const app = express();
 
-// Disable CORS by allowing all origins and methods
-app.use(cors({ origin: "*", credentials: true }));
+// Allow specific origin with credentials
+const allowedOrigins = [process.env.FRONTEND_URL, "http://localhost:5173"];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+};
+
+app.use(cors(corsOptions));
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
