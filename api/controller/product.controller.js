@@ -117,3 +117,28 @@ export const editProduct = async (req, res) => {
     });
   }
 };
+
+// =============== Get Category ================
+export const getCategory = async (req, res) => {
+  try {
+    const ProductCategory = await Product.distinct("category");
+
+    const ProductByCategory = [];
+    for (const category of ProductCategory) {
+      const product = await Product.findOne({ category });
+      if (product) ProductByCategory.push(product);
+    }
+
+    return res.status(200).json({
+      error: false,
+      success: true,
+      data: ProductByCategory,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      success: false,
+      error: true,
+    });
+  }
+};

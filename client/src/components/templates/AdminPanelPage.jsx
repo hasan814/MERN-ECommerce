@@ -43,7 +43,7 @@ const AdminPanelPage = () => {
               to={"all-products"}
               className="p-2 rounded-lg hover:bg-blue-600"
             >
-              all-Products
+              All-Products
             </Link>
           </nav>
         </div>

@@ -19,4 +19,8 @@ export const SummaryApi = {
     url: `${backendDomin}/api/product/edit-product`,
     method: "POST",
   },
+  get_category: {
+    url: `${backendDomin}/api/product/get-category`,
+    method: "GET",
+  },
 };
