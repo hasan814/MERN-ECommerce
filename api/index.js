@@ -23,7 +23,25 @@ mongoose
 const __dirname = path.resolve();
 
 const app = express();
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+
+// CORS configuration to handle multiple origins for development and production
+const allowedOrigins = [
+  process.env.FRONTEND_URL, // Production frontend URL
+  "http://localhost:5173", // Development frontend URL
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true, // Allow cookies to be sent
+};
+
+app.use(cors(corsOptions));
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
@@ -36,13 +54,17 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
 
+// Serve static files from the client/dist directory (for frontend)
 app.use(express.static(path.join(__dirname, "/client/dist")));
+
+// Fallback for serving index.html (for SPA routing)
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 
+// Error handling middleware
 app.use((err, req, res, next) => {
-  const statusCode = err.message || 500;
+  const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
-  return res.status(statusCode).join({ success: false, statusCode, message });
+  return res.status(statusCode).json({ success: false, statusCode, message });
 });
